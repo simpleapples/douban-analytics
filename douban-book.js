@@ -1,4 +1,4 @@
-var USERNAME = 'simpleapples';
+var USERNAME = '';
 var YEAR = 2013;
 
 var http = require('http');
