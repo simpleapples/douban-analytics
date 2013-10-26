@@ -1,7 +1,7 @@
 douban-analytics
 ================
 
-调用豆瓣api分析指定用户在一年中每月读书的本书。并调用console.log以柱状图形式在terminal中输出。
+调用豆瓣api分析指定用户在一年中每月读书的本数。并调用console.log以柱状图形式在terminal中输出。
 
 ##使用方法
 
