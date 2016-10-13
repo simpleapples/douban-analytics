@@ -1,9 +1,9 @@
-var USERNAME = '';
-var YEAR = 2013;
+var USERNAME = 'simpleapples';
+var YEAR = 2016;
 
-var http = require('http');
+var request = require('request');
 
-var url = 'http://api.douban.com/v2/book/user/' + USERNAME + '/collections?status=read&from=' + YEAR + '-01-01T00:00:00+08:00&to=' + (YEAR + 1) + '-01-01T00:00:00+08:00';
+var url = 'https://api.douban.com/v2/book/user/' + USERNAME + '/collections?status=read&from=' + YEAR + '-01-01T00:00:00+08:00&to=' + (YEAR + 1) + '-01-01T00:00:00+08:00';
 var bookHolder = [];
 var total = 0;
 
@@ -35,16 +35,12 @@ function getReadBook() {
 }
 
 function fetchUrl(url, callback) {
-	http.get(url, function(res) {
-		var data = '';
-		res.on('data', function (chunk) {
-			data += chunk;
-		});
-		res.on('end', function() {
-			callback(data);
-		});
-	}).on('error', function() {
-		callback(null);
+	request(url, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			callback(body)
+		} else {
+			callback(null)
+		}
 	});
 }
 
@@ -81,7 +77,6 @@ function displayData() {
 		var str = '';
 		for (j = 0; j < monthCount.length; j++) {
 			str += (strArr[j][i] + ' ');
-			// console.log(strArr[i][j]);
 		}
 		console.log(str);
 	}
