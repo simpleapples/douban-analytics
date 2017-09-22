@@ -1,5 +1,5 @@
 var USERNAME = 'simpleapples';
-var YEAR = 2016;
+var YEAR = 2017;
 
 var request = require('request');
 
@@ -82,6 +82,7 @@ function displayData() {
 	}
 	console.log('== == == == == == == == == == == ==');
 	console.log(' 1  2  3  4  5  6  7  8  9 10 11 12 Month');
+	console.log('Total:', bookHolder.length);
 }
 
 function fillZero(val) {
