@@ -1,6 +1,6 @@
 {
 	"name": "豆瓣读书统计",
-	"version": "1.0",
+	"version": "1.1",
 	"description": "统计豆瓣主页的读书信息",
 	"browser_action": {
 		"default_icon": "icon128.png"

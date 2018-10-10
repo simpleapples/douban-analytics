@@ -1,6 +1,6 @@
 async function fetchUrl(url) {
     const axiosInstance = axios.create({
-        timeout: 1000,
+        timeout: 3000,
         method: 'GET',
         headers: {
             referrerPolicy: 'no-referrer-when-downgrade',
