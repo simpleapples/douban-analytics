@@ -18,7 +18,7 @@ async function getBookData(url) {
     const data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     const resData = await fetchUrl(url);
     total = resData.total;
-    let count = 0
+    let count = 0;
     const page = Math.round(total / 100);
     for (let i = 0; i < page + 1; i++) {
         const start = i * 100;
@@ -61,11 +61,14 @@ function showChart(currentMonth, yData) {
         }],
     };
 
+    const titleEle = document.querySelector('#db-usr-profile div.info h1');
+    const username = titleEle.innerText.split('\n')[0].trim();
+
     const readingEle = document.createElement('div');
     readingEle.id = 'reading';
 
     const readingTitle = document.createElement('h2');
-    readingTitle.innerHTML = '最近一年读书统计';
+    readingTitle.innerHTML = username + '最近一年读书统计';
 
     const readingChartEle = document.createElement('div');
     readingChartEle.id = 'reading-chart';
@@ -91,10 +94,12 @@ async function getDataAndDisplay(username, currentYear, currentMonth) {
 
 async function main() {
     const now = new Date();
-    const currentYear = now.getFullYear()
+    const currentYear = now.getFullYear();
     const currentMonth = now.getMonth() + 1;
 
-    await getDataAndDisplay('simpleapples', currentYear, currentMonth);
+    const username = window.location.href.replace('https://www.douban.com/people/', '').replace('/', '');
+    
+    await getDataAndDisplay(username, currentYear, currentMonth);
 }
 
 main();
