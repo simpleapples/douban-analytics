@@ -1,17 +1,15 @@
 async function fetchUrl(url) {
-    const axiosInstance = axios.create({
-        timeout: 3000,
-        method: 'GET',
-        headers: {
-            referrerPolicy: 'no-referrer-when-downgrade',
-        },
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage(
+            { type: "queryAPI", url: url },
+            content => {
+                if (content.total > 0) {
+                    resolve(content);
+                }
+                reject()
+            }
+        );
     });
-    try {
-        const res = await axiosInstance.get(url);
-        return Promise.resolve(res.data);
-    } catch (err) {
-        return Promise.reject();
-    }
 }
 
 async function getBookData(url) {
@@ -24,7 +22,7 @@ async function getBookData(url) {
         const start = i * 100;
         const resData = await fetchUrl(url + '&count=100&start=' + start);
         for (let i = 0; i < resData.collections.length; i++) {
-            const item = resData.collections[i];                    
+            const item = resData.collections[i];
             const date = new Date(Date.parse(item.updated));
             data[date.getMonth()] += 1;
             count += 1;
@@ -84,12 +82,26 @@ function showChart(currentMonth, yData) {
 }
 
 async function getDataAndDisplay(username, currentYear, currentMonth) {
-    const url = ['https://api.douban.com/v2/book/user/', username, '/collections?status=read&from=', currentYear - 1, '-', currentMonth + 1, '-01T00:00:00+08:00&to=', currentYear, '-', currentMonth + 1, '-01T00:00:00+08:00'].join('');
+    let nextMonth = currentMonth + 1;
+    if (nextMonth === 13) {
+        currentYear += 1;
+        nextMonth = 1;
+    }
+    const currentMonthStr = fillZero(currentMonth);
+    const nextMonthStr = fillZero(nextMonth);
+    const url = ['https://api.douban.com/v2/book/user/', username, '/collections?status=read&from=', currentYear - 1, '-', nextMonthStr, '-01T00:00:00+08:00&to=', currentYear, '-', nextMonthStr, '-01T00:00:00+08:00', '&apikey=0df993c66c0c636e29ecbb5344252a4a'].join('');
     try {
         const data = await getBookData(url);
         showChart(currentMonth, data);
-    } catch(err) {
+    } catch (err) {
     }
+}
+
+function fillZero(intVal) {
+    if (intVal < 10) {
+        return '0' + intVal;
+    }
+    return '' + intVal;
 }
 
 async function main() {
@@ -98,7 +110,7 @@ async function main() {
     const currentMonth = now.getMonth() + 1;
 
     const username = window.location.href.replace('https://www.douban.com/people/', '').replace('/', '');
-    
+
     await getDataAndDisplay(username, currentYear, currentMonth);
 }
 
